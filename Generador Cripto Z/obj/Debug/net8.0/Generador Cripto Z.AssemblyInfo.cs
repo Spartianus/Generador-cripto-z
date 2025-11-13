@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Generador Cripto Z")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f4eb6370c5232e0b5e8869250df234cac0f7ac04")]
 [assembly: System.Reflection.AssemblyProductAttribute("Generador Cripto Z")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Generador Cripto Z")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

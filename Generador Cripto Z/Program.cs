@@ -2,12 +2,17 @@
 using System.Data.SqlClient;
 using System.Security.Cryptography;
 using System.Text;
+using System.IO;
 
 namespace Generador_Cripto_Z
 {
     internal class Program
     {
-        static string connectionString = "Server=localhost\\SQLEXPRESS;Database=sistemaclinico;Trusted_Connection=True;";
+        static string connectionString = "Server=localhost\\SQLEXPRESS01;Database=sistemaclinico;Trusted_Connection=True;";
+
+        // Clave y vector para AES (deben ser los mismos que en el sistema)
+        private static readonly byte[] aesKey = Encoding.UTF8.GetBytes("1234567890ABCDEF1234567890ABCDEF"); // 32 caracteres
+        private static readonly byte[] aesIV = Encoding.UTF8.GetBytes("ABCDEF1234567890"); // 16 caracteres
 
         static void Main()
         {
@@ -33,6 +38,7 @@ namespace Generador_Cripto_Z
             {
                 string key = GenerateKey(); // e.g. SR-AB12-CD34-EF56
                 string keyHash = HashKeyHex(key);
+                string claveCifrada = EncriptarClave(key);
 
                 // Muestra la clave generada
                 Console.ForegroundColor = ConsoleColor.Green;
@@ -45,15 +51,13 @@ namespace Generador_Cripto_Z
                     {
                         con.Open();
                         string sql = @"INSERT INTO sistemaclinico.LicenciasCatalogo
-                                       (KeyHash, ClaveTexto, ExpirationDays, MaxActivations, CreatedBy)
-                                       VALUES (@KeyHash, @ClaveTexto, @ExpirationDays, @MaxActivations, @CreatedBy)";
+                                       (ClaveTexto, ExpirationDays, MaxActivations, Activations, IsActive)
+                                       VALUES (@ClaveTexto, @ExpirationDays, @MaxActivations, 0, 1)";
                         using (SqlCommand cmd = new SqlCommand(sql, con))
                         {
-                            cmd.Parameters.AddWithValue("@KeyHash", keyHash);
-                            cmd.Parameters.AddWithValue("@ClaveTexto", key); // opcional o NULL
+                            cmd.Parameters.AddWithValue("@ClaveTexto", claveCifrada);
                             cmd.Parameters.AddWithValue("@ExpirationDays", days == 0 ? (object)DBNull.Value : days);
                             cmd.Parameters.AddWithValue("@MaxActivations", maxAct == 0 ? (object)DBNull.Value : maxAct);
-                            cmd.Parameters.AddWithValue("@CreatedBy", Environment.UserName);
                             cmd.ExecuteNonQuery();
                         }
                     }
@@ -104,6 +108,25 @@ namespace Generador_Cripto_Z
                 foreach (byte b in hash)
                     sb.AppendFormat("{0:x2}", b);
                 return sb.ToString();
+            }
+        }
+
+        static string EncriptarClave(string textoPlano)
+        {
+            using (Aes aes = Aes.Create())
+            {
+                aes.Key = aesKey;
+                aes.IV = aesIV;
+                ICryptoTransform encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
+
+                using (var ms = new MemoryStream())
+                using (var cs = new CryptoStream(ms, encryptor, CryptoStreamMode.Write))
+                using (var sw = new StreamWriter(cs))
+                {
+                    sw.Write(textoPlano);
+                    sw.Close();
+                    return Convert.ToBase64String(ms.ToArray());
+                }
             }
         }
     }

@@ -42,3 +42,4 @@ C:\Users\Ares2\OneDrive\Documents\Carpeta de proyectos de programacion\Generador
 C:\Users\Ares2\OneDrive\Documents\Carpeta de proyectos de programacion\Generador Cripto Z\Generador Cripto Z\obj\Debug\net8.0\Generador Cripto Z.pdb
 C:\Users\Ares2\OneDrive\Documents\Carpeta de proyectos de programacion\Generador Cripto Z\Generador Cripto Z\obj\Debug\net8.0\Generador Cripto Z.genruntimeconfig.cache
 C:\Users\Ares2\OneDrive\Documents\Carpeta de proyectos de programacion\Generador Cripto Z\Generador Cripto Z\obj\Debug\net8.0\ref\Generador Cripto Z.dll
+C:\Users\Ares2\OneDrive\Documents\Carpeta de proyectos de programacion\Generador Cripto Z\Generador Cripto Z\obj\Debug\net8.0\Generador Cripto Z.sourcelink.json
